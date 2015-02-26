@@ -1,0 +1,28 @@
+DATA=$(osascript -e 'tell application "System Events"
+  set myList to (name of every process)
+end tell
+
+if myList contains "Spotify" then
+  tell application "Spotify"
+    if player state is stopped then
+      set output to "Stopped"
+    else
+      set trackname to name of current track
+      set artistname to artist of current track
+      set albumname to album of current track
+      if player state is playing then
+        set output to "Música: " & trackname & "new_line" & "Artista: " & artistname & "new_line" & "Álbum: " & albumname & "new_line" & "Tocando no Spotify" & "new_line"
+      else if player state is paused then
+        set output to "Música: " & trackname & "new_line" & "Artista: " & artistname & "new_line" & "Álbum: " & albumname & "new_line" & "Pausado" & "new_line"
+      end if
+    end if
+  end tell
+else
+  set output to "Spotify desligado"
+end if')
+
+echo $DATA | awk -F new_line '{print $4}'
+echo $DATA | awk -F new_line '{print $5}'
+echo $DATA | awk -F new_line '{print $1}'
+echo $DATA | awk -F new_line '{print $2}'
+echo $DATA | awk -F new_line '{print $3}'
